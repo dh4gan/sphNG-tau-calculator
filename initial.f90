@@ -26,10 +26,13 @@
 
     ! Set up SPH kernel (TODO)
 
+    call kernel
     ! Read in SPH file (TODO)
 
     call rdump(sphfile)
 
     ! Compute EOS values for SPH data
+
+    call eos
 
 	end subroutine initial
