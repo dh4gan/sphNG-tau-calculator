@@ -1,203 +1,203 @@
-      subroutine rdump(filename,rcheck,skip)
+subroutine rdump(filename,rcheck,skip)
 
-!----------------------------------------------------------------------
-! Subroutine to read in dump files.
-! Updated from rdump_PJC.f, to be compatible with Fortan 90/95
-!
-! PJC 08/05/2008
-!----------------------------------------------------------------------
-      use sphdata
-        
-      implicit none
-      integer(kind=4) :: int1,int2,itest1,itest2,itest3,itest4
-      integer(kind=4) :: check,number,null,i,j
-      integer(kind=8) :: number8
-      integer,intent(inout) :: rcheck,skip
-      real :: rtest1
-      character(7),intent(in) :: filename
+  !----------------------------------------------------------------------
+  ! Subroutine to read in dump files.
+  ! Updated from rdump_PJC.f, to be compatible with Fortan 90/95
+  !
+  ! PJC 08/05/2008
+  !----------------------------------------------------------------------
+  use sphdata
 
-! Standard integers for read in:
-      int1 = 690706
-      int2 = 780806
+  implicit none
+  integer(kind=4) :: int1,int2,itest1,itest2,itest3,itest4
+  integer(kind=4) :: check,number,null,i,j
+  integer(kind=8) :: number8
+  integer,intent(inout) :: rcheck,skip
+  real :: rtest1
+  character(7),intent(in) :: filename
 
-! Open file to read in:
-      print*, '1) SPH file    : ', filename
-      open(10,file=filename,status='old',iostat=check,&
-           form='unformatted',action='read')
+  ! Standard integers for read in:
+  int1 = 690706
+  int2 = 780806
 
-! If open statement fails, return an error to main program:
-      if (check /= 0) THEN
-         print*, '      - SPH input file not found'
-         rcheck = 1
-         return
-      endif
-      print*, '      - Reading in SPH file'
+  ! Open file to read in:
+  print*, '1) SPH file    : ', filename
+  open(10,file=filename,status='old',iostat=check,&
+       form='unformatted',action='read')
 
-      if (check /= 0) then
-         print*, 'Error in rdump: file open failed'
-         rcheck = 1
-         return
-      endif
-!-------------------File header-----------------------------------------
-! Check file header and return errors if necesary:
-      read(10) itest1,rtest1,itest2,itest3,itest4
-      if (itest1 /= int1) then
-         print*, 'Error in rdump: ENDIANNESS wrong?'
-         rcheck = 1
-         return
-      elseif (itest2 /= int2) then
-         print*, 'Error in rdump: default integer size wrong'
-         rcheck = 1
-         return
-      elseif (itest4 /= int1) then
-         print*, 'Error in rdump: default real size wrong'
-      endif
-      read(10)  fileident
+  ! If open statement fails, return an error to main program:
+  if (check /= 0) THEN
+     print*, '      - SPH input file not found'
+     rcheck = 1
+     return
+  endif
+  print*, '      - Reading in SPH file'
 
-!-------------------Single values---------------------------------------
-! Read default integers
-		      
-      read (10) number
-      if (number /= 6) then
-         print*, 'Error in rdump: No. of default integers wrong'
-         rcheck = 1
-         return
-      endif
-      read (10) npart,n1,n2,nreassign,naccrete,nkill
+  if (check /= 0) then
+     print*, 'Error in rdump: file open failed'
+     rcheck = 1
+     return
+  endif
+  !-------------------File header-----------------------------------------
+  ! Check file header and return errors if necesary:
+  read(10) itest1,rtest1,itest2,itest3,itest4
+  if (itest1 /= int1) then
+     print*, 'Error in rdump: ENDIANNESS wrong?'
+     rcheck = 1
+     return
+  elseif (itest2 /= int2) then
+     print*, 'Error in rdump: default integer size wrong'
+     rcheck = 1
+     return
+  elseif (itest4 /= int1) then
+     print*, 'Error in rdump: default real size wrong'
+  endif
+  read(10)  fileident
 
-! Read in integers of size int*1, int*2, int*4, int*8
-      do i = 1, 4
-         read (10) number
-      end do
+  !-------------------Single values---------------------------------------
+  ! Read default integers
 
-!-------------------Real values-----------------------------------------
-! Read default reals
-      read(10) number
-      if (number /= 14) then
-!         print*, 'Error in rdump: No. of default reals wrong'
-	print*, 'Skipping small dump ',filename
-	print*, ''
-	skip = 1
-         rcheck = 1
-         return
-      endif
-      read(10) gt,dtmaxdp,gamma,rhozero,RK2,escap,tkin,tgrav, &
-		      tterm,anglostx,anglosty,anglostz,specang,ptmassin			
+  read (10) number
+  if (number /= 6) then
+     print*, 'Error in rdump: No. of default integers wrong'
+     rcheck = 1
+     return
+  endif
+  read (10) npart,n1,n2,nreassign,naccrete,nkill
 
-! Read real*4s
-      read(10) number
+  ! Read in integers of size int*1, int*2, int*4, int*8
+  do i = 1, 4
+     read (10) number
+  end do
 
-! Read real*8s
-      read(10) number
-      if (number /= 3) then
-         print*, 'Error in rdump: No. of real*8s wrong'
-         rcheck = 1
-         return
-      endif
-      read(10) udist,umass,utime
+  !-------------------Real values-----------------------------------------
+  ! Read default reals
+  read(10) number
+  if (number /= 14) then
+     !         print*, 'Error in rdump: No. of default reals wrong'
+     print*, 'Skipping small dump ',filename
+     print*, ''
+     skip = 1
+     rcheck = 1
+     return
+  endif
+  read(10) gt,dtmaxdp,gamma,rhozero,RK2,escap,tkin,tgrav, &
+       tterm,anglostx,anglosty,anglostz,specang,ptmassin			
 
-!		Set up other units also
+  ! Read real*4s
+  read(10) number
 
-	  	ulum = 3.826d33
-		udens = umass/(udist**3.0d0)
-		uopac = (udist**2.0d0/umass)
-	    uergg =  DBLE(udist)**2/DBLE(utime)**2
-		
-!-------------------Array header----------------------------------------
-      read(10) number
-      if (number /= 2) then
-         print*, 'Error in rdump: No. of array types wrong'
-         rcheck = 1
-         return
-      endif
+  ! Read real*8s
+  read(10) number
+  if (number /= 3) then
+     print*, 'Error in rdump: No. of real*8s wrong'
+     rcheck = 1
+     return
+  endif
+  read(10) udist,umass,utime
 
-! Read array type 1 header
-      read(10) number8, (nums(i), i=1,8)
-      if (number8 /= npart) then
-         print*, 'Error in rdump: npart wrong'
-         rcheck = 1
-         return
-      endif
-      
-! Read array type 2 header
-      read(10) nptmass, (nums(i), i=1,8)                        
+  !		Set up other units also
+
+  ulum = 3.826d33
+  udens = umass/(udist**3.0d0)
+  uopac = (udist**2.0d0/umass)
+  uergg =  DBLE(udist)**2/DBLE(utime)**2
+
+  !-------------------Array header----------------------------------------
+  read(10) number
+  if (number /= 2) then
+     print*, 'Error in rdump: No. of array types wrong'
+     rcheck = 1
+     return
+  endif
+
+  ! Read array type 1 header
+  read(10) number8, (nums(i), i=1,8)
+  if (number8 /= npart) then
+     print*, 'Error in rdump: npart wrong'
+     rcheck = 1
+     return
+  endif
+
+  ! Read array type 2 header
+  read(10) nptmass, (nums(i), i=1,8)                        
 
 
-	print*, 'npart, nptmass ', npart, nptmass
-			 
-!-------------------Type 1 array values---------------------------------
-! Allocate arrays as required
-      allocate(iphase(npart))
-      allocate(isteps(npart))
-      allocate(xyzmh(5,npart))
-      allocate(vxyzu(4,npart))
-      allocate(rho(npart))
-      allocate(dgrav(npart))
-!      allocate(lpart(npart))
-!      allocate(Tpart(npart))
-		      
-	
-! Read default integers!      integer,dimension(500001) :: testph
+  print*, 'npart, nptmass ', npart, nptmass
 
-      read(10) (isteps(i), i=1,npart)
-	
-! Read integer*1s
-      read(10) (iphase(i), i=1,npart)
+  !-------------------Type 1 array values---------------------------------
+  ! Allocate arrays as required
+  allocate(iphase(npart))
+  allocate(isteps(npart))
+  allocate(xyzmh(5,npart))
+  allocate(vxyzu(4,npart))
+  allocate(rho(npart))
+  allocate(dgrav(npart))
+  !      allocate(lpart(npart))
+  !      allocate(Tpart(npart))
 
-	
-! Read default reals
-      do j = 1,5
-         read(10) (xyzmh(j,i), i=1,npart)
-      enddo
-      do j = 1,4
-         read(10) (vxyzu(j,i), i=1,npart)
-      enddo
-	
-! Read real*4s
-      read(10) (rho(i), i=1,npart)
-      read(10) (dgrav(i), i=1,npart) 
 
-	print*, 'SPH particles read'
-			 
-!-------------------Type 2 array values---------------------------------
-! Allocate arrays as required
+  ! Read default integers!      integer,dimension(500001) :: testph
 
-	allocate(listpm(nptmass))
-	allocate(spinx(nptmass))
-	allocate(spiny(nptmass))
-	allocate(spinz(nptmass))
-	allocate(angaddx(nptmass))
-	allocate(angaddy(nptmass))
-	allocate(angaddz(nptmass))
-	allocate(spinadx(nptmass))
-	allocate(spinady(nptmass))
-	allocate(spinadz(nptmass))
-			 
+  read(10) (isteps(i), i=1,npart)
 
-			 
-! Read default integers
-      read (10) (listpm(i), i=1,nptmass)
+  ! Read integer*1s
+  read(10) (iphase(i), i=1,npart)
 
-! Read default reals
-      read (10) (spinx(i),i=1,nptmass)
-      read (10) (spiny(i),i=1,nptmass)
-      read (10) (spinz(i),i=1,nptmass)
-      read (10) (angaddx(i),i=1,nptmass)
-      read (10) (angaddy(i),i=1,nptmass)
-      read (10) (angaddz(i),i=1,nptmass)
-      read (10) (spinadx(i),i=1,nptmass)
-      read (10) (spinady(i),i=1,nptmass)
-      read (10) (spinadz(i),i=1,nptmass)
 
-      print*, 'pointmasses read'
-      close(10)
+  ! Read default reals
+  do j = 1,5
+     read(10) (xyzmh(j,i), i=1,npart)
+  enddo
+  do j = 1,4
+     read(10) (vxyzu(j,i), i=1,npart)
+  enddo
 
-      print*, '      - SPH dump file correctly read in'
-      print*, '      -',npart,'particles in total'
-      print*, '      -',npart-naccrete-1,'gas particles active'
-      print*, ' '
+  ! Read real*4s
+  read(10) (rho(i), i=1,npart)
+  read(10) (dgrav(i), i=1,npart) 
 
-      return
-     
-    
-      end subroutine rdump
+  print*, 'SPH particles read'
+
+  !-------------------Type 2 array values---------------------------------
+  ! Allocate arrays as required
+
+  allocate(listpm(nptmass))
+  allocate(spinx(nptmass))
+  allocate(spiny(nptmass))
+  allocate(spinz(nptmass))
+  allocate(angaddx(nptmass))
+  allocate(angaddy(nptmass))
+  allocate(angaddz(nptmass))
+  allocate(spinadx(nptmass))
+  allocate(spinady(nptmass))
+  allocate(spinadz(nptmass))
+
+
+
+  ! Read default integers
+  read (10) (listpm(i), i=1,nptmass)
+
+  ! Read default reals
+  read (10) (spinx(i),i=1,nptmass)
+  read (10) (spiny(i),i=1,nptmass)
+  read (10) (spinz(i),i=1,nptmass)
+  read (10) (angaddx(i),i=1,nptmass)
+  read (10) (angaddy(i),i=1,nptmass)
+  read (10) (angaddz(i),i=1,nptmass)
+  read (10) (spinadx(i),i=1,nptmass)
+  read (10) (spinady(i),i=1,nptmass)
+  read (10) (spinadz(i),i=1,nptmass)
+
+  print*, 'pointmasses read'
+  close(10)
+
+  print*, '      - SPH dump file correctly read in'
+  print*, '      -',npart,'particles in total'
+  print*, '      -',npart-naccrete-1,'gas particles active'
+  print*, ' '
+
+  return
+
+
+end subroutine rdump

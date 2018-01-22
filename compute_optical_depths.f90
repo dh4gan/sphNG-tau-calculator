@@ -1,4 +1,7 @@
 subroutine compute_optical_depths
+! Calculates optical depth from every particle to every sink/pointmass particle
+
+
 use sphdata
 use treedata
 use eosdata, only: gammamuT
