@@ -1,6 +1,7 @@
 subroutine compute_optical_depths
+use sphdata
 
-
+implicit none
 
 allocate(tausink(nptmass,npart))
 allocate(av(nptmass,npart))
@@ -96,12 +97,12 @@ do iptmass=1,nptmass
         tauparticle = 0.0
         call calc_tau(jpart,gammamuT(4,jpart),tsphere(jpart),tauparticle)
 
-        tau(ipart) = tau(ipart) + tauparticle
+        tau(iptmass,ipart) = tau(iptmass,ipart) + tauparticle
 
       endif
 
     ! Av = log10(e) tau 
-        Av = 1.086*tau(ipart)
+        Av = 1.086*tau(iptmass,ipart)
       ! TODO - Convert optical depth to Av
    enddo
 enddo

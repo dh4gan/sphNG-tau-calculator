@@ -24,9 +24,6 @@
 
     call eosread
 
-    ! Set up SPH kernel (TODO)
-
-    call kernel
     ! Read in SPH file (TODO)
 
     call rdump(sphfile)

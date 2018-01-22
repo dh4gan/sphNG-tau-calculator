@@ -1,4 +1,4 @@
-      subroutine eos(rho,
+      subroutine eos
 !-----------------------------------------------------------------------
 ! Reads and interpolates the equation of state tables to give
 ! temperatures, opacities etc
@@ -6,8 +6,7 @@
 ! Extended to opacities DHF 01/09/2009
 !-----------------------------------------------------------------------
 
-      use sphgravdata
-      use eosdata
+      use sphdata
 
       implicit none
 
