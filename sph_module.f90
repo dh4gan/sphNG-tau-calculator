@@ -34,7 +34,6 @@
       real,allocatable,dimension(:) :: angaddx,angaddy,angaddz
       real,allocatable,dimension(:) :: spinadx,spinady,spinadz
       real,allocatable,dimension(:,:) :: xyzmh,vxyzu
-      real, allocatable,dimension(:,:) :: tausink,Av, gammamuT
+      real, allocatable,dimension(:,:) :: tausink,Av
       real(kind=4),allocatable,dimension(:) :: rho,dgrav,cs,Tpart
-	  real, allocatable, dimension(:,:,:) :: OPTABLE
       end module sphdata

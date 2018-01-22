@@ -3,6 +3,7 @@
 !	This routine is kernel dependent
 
 	use sphdata	
+ use treedata, only: b
 
 	real(kind=8) ::  m,h,xi,x,b_i,tau,kap
 	real(kind=8) ::  b_norm, r_f,s

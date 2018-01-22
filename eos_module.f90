@@ -20,7 +20,7 @@
       real(kind=8),parameter :: uergg = udist*udist/(utime*utime)
 
 ! Arrays
-      real,allocatable,dimension(:,:) :: gammamuT
+      real,allocatable,dimension(:,:) :: gammamuT,cstab
       real,allocatable,dimension(:,:,:) :: eostable
 
       end module eosdata

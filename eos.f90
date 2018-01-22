@@ -6,7 +6,8 @@
 ! Extended to opacities DHF 01/09/2009
 !-----------------------------------------------------------------------
 
-      use sphdata
+      use eosdata
+      use sphdata, only: npart, rho, vxyzu
 
       implicit none
 

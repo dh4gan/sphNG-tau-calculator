@@ -1,7 +1,12 @@
 subroutine compute_optical_depths
 use sphdata
-
+use treedata
+use eosdata, only: gammamuT
 implicit none
+
+integer :: iray,ipart,jpart,iptmass,k
+real :: t_try, tauparticle,tmax,nmag
+real, dimension(3) :: n,rsink
 
 allocate(tausink(nptmass,npart))
 allocate(av(nptmass,npart))
@@ -20,7 +25,8 @@ do iptmass=1,nptmass
       ! sinks and dead particles get zero tau
       if(iphase(ipart)/=0) then
          tausink(iptmass,ipart) = 0.0
-      else
+         cycle
+      endif
 
 
       ! Find direction vector of ray back to sink
@@ -47,46 +53,47 @@ do iptmass=1,nptmass
         if(ipart==jpart) cycle
 
 
-      ! Calculate t_min
+        ! Calculate t_min
 
-    t_try = 0.0
+        t_try = 0.0
 
-    do k=1,3
-        t_try = t_try + n(k)*(xyzmh(k,jpart)-xyzmh(k,ipart))
-    enddo
+        do k=1,3
+           t_try = t_try + n(k)*(xyzmh(k,jpart)-xyzmh(k,ipart))
+        enddo
 
         ! t must be less than tmax: t such that ray hits sink location
-    if(t_try>tmax) cycle
+        if(t_try>tmax) cycle
 
 
-    ! Calculate b
+        ! Calculate b
 
-    b(jpart) = 0.0
-    do k=1,3
-        b(jpart) = b(jpart) + (xyzmh(k,ipart) + t_try*n(k) - xyzmh(k,jpart))**2 +&
-    enddo
+        b(jpart) = 0.0
+        do k=1,3
+           b(jpart) = b(jpart) + &
+                (xyzmh(k,ipart) + t_try*n(k) - xyzmh(k,jpart))**2
+        enddo
 
-    b(jpart) = SQRT(b(jpart))
+        b(jpart) = SQRT(b(jpart))
 
-    t_sphere(jpart) = 2.0d0*SQRT(4.0d0*xyzmh(5,jpart)**2 - b(jpart)*b(jpart))
+        t_sphere(jpart) = 2.0d0*SQRT(4.0d0*xyzmh(5,jpart)**2 - b(jpart)*b(jpart))
 
-    ! If t -ve and sufficiently distant, particle is behind ray, should be excluded
-    if(t_try<0.0d0.and.ABS(t_try)>t_sphere/2.0d0) cycle
+        ! If t -ve and sufficiently distant, particle is behind ray, should be excluded
+        if(t_try<0.0d0 .and. ABS(t_try)>0.5*t_sphere(jpart)) cycle
 
 
-    ! If b < 2*h_i, then add to list
+        ! If b < 2*h_i, then add to list
 
-    if(b(jpart) < 2.0*xyzmh(5,jpart)) then
+        if(b(jpart) < 2.0*xyzmh(5,jpart)) then
 
-    ! Add particle to raylist
+           ! Add particle to raylist
 
-    ray(nray) = ipart
-    t_min(nray) = t_try
+           ray(nray) = ipart
+           t_min(nray) = t_try
 
-    nray = nray+1
-    endif
+           nray = nray+1
+        endif
 
-    enddo
+     enddo
     ! End of loop over jpart
 
     ! loop over raylist and calculate optical depths
@@ -95,18 +102,20 @@ do iptmass=1,nptmass
 
         jpart = ray(iray)
         tauparticle = 0.0
-        call calc_tau(jpart,gammamuT(4,jpart),tsphere(jpart),tauparticle)
+        call calc_tau(jpart,gammamuT(4,jpart),t_sphere(jpart),tauparticle)
 
-        tau(iptmass,ipart) = tau(iptmass,ipart) + tauparticle
+        tausink(iptmass,ipart) = tausink(iptmass,ipart) + tauparticle
+        
+        ! Av = log10(e) tau 
+        Av = 1.086*tausink(iptmass,ipart)
+        ! TODO - Convert optical depth to Av
+     enddo
 
-      endif
+  enddo
+  ! End of loop over particles
 
-    ! Av = log10(e) tau 
-        Av = 1.086*tau(iptmass,ipart)
-      ! TODO - Convert optical depth to Av
-   enddo
 enddo
-
+! End of loop over sinks
 
 
 end subroutine compute_optical_depths

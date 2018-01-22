@@ -21,7 +21,7 @@
 
 integer, allocatable, dimension(:) :: ray,n_occ,parent,n_child,nneigh,partbin
 integer, allocatable, dimension(:,:) :: child, occ, neighb		
-real,allocatable, dimension(:) :: b,t_min
+real,allocatable, dimension(:) :: b,t_min,t_sphere
 real, allocatable, dimension(:,:) :: r_node, dr_node,bbr_min, bbr_max
 
 

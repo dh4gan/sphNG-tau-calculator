@@ -133,8 +133,8 @@
       allocate(vxyzu(4,npart))
       allocate(rho(npart))
       allocate(dgrav(npart))
-      allocate(lpart(npart))
-      allocate(Tpart(npart))
+!      allocate(lpart(npart))
+!      allocate(Tpart(npart))
 		      
 	
 ! Read default integers!      integer,dimension(500001) :: testph
