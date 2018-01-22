@@ -27,10 +27,10 @@ FFLAGS = -O3 -frecord-marker=4 -fdefault-real-8
 %.o: %.f90
 	$(FC) $(FFLAGS) -c $<
 
-SOURCESAF90 = sph_module.f90 eos_module.f90 tree_module.f90 main.f90 \
-	calc_tau.f90 compute_optical_depths.f90 \
+SOURCESAF90 = sphdata_module.f90 eos_module.f90 tree_module.f90 main.f90 \
+	calc_tau.f90 compute_optical_depths.f90 deallocate_memory.f90 \
 	eos.f90 eosread.f90 initial.f90 \
-	rdump_sph.f90 write_tau_data.f90
+	read_dump.f90 rdump_sphNG_wkmr.f90 rdump_sphNG_iab.f90 write_binary.f90
 
 OBJECTSA    = $(SOURCESAF90:.f90=.o)
 

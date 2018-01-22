@@ -3,20 +3,43 @@ program sph_tau_calculator
 ! Code reads in an sphNG file, and then computes optical depth (Av)
 ! from all SPH particles to all sinks
 
+use sphdata,only:nfiles
+implicit none
+
+logical :: skipdump
+integer :: ifile
 
 ! Read in parameters, data and set up run
 
 call initial
 
-! Compute optical depths
-
-call compute_optical_depths
-
-! Write SPH data to ASCII file (ID, tau, Av)
-
-call write_tau_data
+do ifile=1,nfiles
 
 
+
+     ! *********************
+     ! 1. Read in data file
+     ! *********************
+
+     call read_dump(ifile,skipdump)
+
+     if(skipdump.eqv..true.) cycle
+    
+     ! Compute opacities etc for this dump
+     call eos
+
+     ! Compute optical depths
+
+     call compute_optical_depths
+
+     ! Write SPH data to binary
+
+     call write_binary
+
+     ! Deallocate memory ready for the next file
+     call deallocate_memory
+
+  enddo
 
 end program sph_tau_calculator
 

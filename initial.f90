@@ -1,4 +1,9 @@
-	subroutine initial
+subroutine initial
+
+use sphdata
+
+character(100) :: suffix
+
     ! Set up calculation
 
     !             Display header
@@ -9,27 +14,47 @@
     print*, "-----------------------------------------------"
     print*, " "
     print*, "-----------------------------------------------"
-    print*, " input parameters in ./sph_tau_calculator.params"
+    print*, " input parameters in ./",trim(paramfile)
+    print*, ""
 
     ! Read in parameter file
 
-    OPEN(10,file='sph_tau_calculator.params', status='unknown')
-
-    read(10,*) sphfile
-    read(10,*) outputfile
+    OPEN(10,file=paramfile, status='unknown')
+    read(10,*) listfile
+    read(10,*) fileformat
 
     close(10)
 
-    ! Read in equation of state file (TODO)
 
-    call eosread
+     open(10,file=paramfile, status='old')
+  read(10,*) listfile ! File containing list of dumps to analyse
+  read(10,*) fileformat ! sphNG_wkmr, sphNG_iab
 
-    ! Read in SPH file (TODO)
+  close(10)
 
-    call rdump(sphfile)
+  ! Read listfile and generate array of filenames
 
-    ! Compute EOS values for SPH data
+  open(20, file=listfile, form='formatted')
 
-    call eos
+  read(20,*) nfiles
 
-	end subroutine initial
+  allocate(filename(nfiles))
+  do ifile=1,nfiles
+     read(20,*) filename(ifile)
+  enddo
+  
+  allocate(outputfile(nfiles))
+
+  do ifile=1,nfiles
+
+     write(suffix, '("_",A)') trim(filename(ifile))
+     write(outputfile(ifile),'("trimmedbinary",A)') trim(suffix)
+  enddo
+
+  ! Read in equation of state file
+     
+  call eosread
+
+ 
+
+end subroutine initial

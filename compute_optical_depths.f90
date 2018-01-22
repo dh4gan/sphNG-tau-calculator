@@ -109,9 +109,6 @@ do iptmass=1,nptmass
 
         tausink(iptmass,ipart) = tausink(iptmass,ipart) + tauparticle
         
-        ! Av = log10(e) tau 
-        Av = 1.086*tausink(iptmass,ipart)
-        ! TODO - Convert optical depth to Av
      enddo
 
   enddo
@@ -119,6 +116,9 @@ do iptmass=1,nptmass
 
 enddo
 ! End of loop over sinks
+
+! Av = log10(e) tau 
+Av(:,:) = 1.086*tausink(iptmass,ipart)
 
 
 end subroutine compute_optical_depths
