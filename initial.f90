@@ -1,32 +1,32 @@
 subroutine initial
 
-use sphdata
+  use sphdata
 
-character(100) :: suffix
+  character(100) :: suffix
 
-    ! Set up calculation
+  ! Set up calculation
 
-    !             Display header
-    print*, " "
-    print*, "-----------------------------------------------"
-    print*, "    CALCULATING OPTICAL DEPTHS IN sphNG DATA"
-    print*, "     Created by D.Forgan, 8th January 2018       "
-    print*, "-----------------------------------------------"
-    print*, " "
-    print*, "-----------------------------------------------"
-    print*, " input parameters in ./",trim(paramfile)
-    print*, ""
+  !             Display header
+  print*, " "
+  print*, "-----------------------------------------------"
+  print*, "    CALCULATING OPTICAL DEPTHS IN sphNG DATA"
+  print*, "     Created by D.Forgan, 8th January 2018       "
+  print*, "-----------------------------------------------"
+  print*, " "
+  print*, "-----------------------------------------------"
+  print*, " input parameters in ./",trim(paramfile)
+  print*, ""
 
-    ! Read in parameter file
+  ! Read in parameter file
 
-    OPEN(10,file=paramfile, status='unknown')
-    read(10,*) listfile
-    read(10,*) fileformat
+  OPEN(10,file=paramfile, status='unknown')
+  read(10,*) listfile
+  read(10,*) fileformat
 
-    close(10)
+  close(10)
 
 
-     open(10,file=paramfile, status='old')
+  open(10,file=paramfile, status='old')
   read(10,*) listfile ! File containing list of dumps to analyse
   read(10,*) fileformat ! sphNG_wkmr, sphNG_iab
 
@@ -42,7 +42,7 @@ character(100) :: suffix
   do ifile=1,nfiles
      read(20,*) filename(ifile)
   enddo
-  
+
   allocate(outputfile(nfiles))
 
   do ifile=1,nfiles
@@ -52,9 +52,9 @@ character(100) :: suffix
   enddo
 
   ! Read in equation of state file
-     
+
   call eosread
 
- 
+
 
 end subroutine initial
