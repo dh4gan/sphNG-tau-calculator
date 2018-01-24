@@ -13,6 +13,7 @@ real :: percent,increment
 real, dimension(3) :: n,rsink
 
 allocate(tausink(nptmass,npart))
+allocate(pathlength(nptmass,npart))
 allocate(av(nptmass,npart))
 allocate(b(npart), t_sphere(npart))
 allocate(t_min(npart))
@@ -20,9 +21,9 @@ allocate(ray(npart))
 
 tausink(:,:) = 0.0
 av(:,:) = 0.0
+pathlength(:,:) = 0.0
 
 print*, 'Computing optical depths'
-
 
 ! Loop over all sinks
 do iptmass=1,nptmass
@@ -45,15 +46,14 @@ do iptmass=1,nptmass
 
 
       ! Find direction vector of ray back to sink
-
-        nmag = 0.0
+        
         n(:) = 0.0
          do k=1,3
             n(k) = rsink(k)-xyzmh(k,ipart)
-            nmag = nmag + n(k)*n(k)
+            pathlength(iptmass,ipart) = pathlength(iptmass,ipart) + n(k)*n(k)
          enddo
 
-      n(:) = n(:)/nmag
+      n(:) = n(:)/pathlength(iptmass,ipart)
 
       ! Ray halts at tmax = star location
       tmax = nmag

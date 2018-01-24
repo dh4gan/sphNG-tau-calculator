@@ -90,7 +90,7 @@ module sphdata
 
   character(100), allocatable,dimension(:) :: filename,outputfile
 
-  real,allocatable,dimension(:,:) :: tausink, Av
+  real,allocatable,dimension(:,:) :: tausink, Av, pathlength
   
   
 contains
