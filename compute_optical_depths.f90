@@ -8,7 +8,7 @@ use eosdata, only: gammamuT
 implicit none
 
 integer :: iray,ipart,jpart,iptmass,k
-real :: t_try, tauparticle,tmax,nmag
+real :: t_try, tauparticle,tmax
 real :: percent,increment
 real, dimension(3) :: n,rsink
 
@@ -53,10 +53,14 @@ do iptmass=1,nptmass
             pathlength(iptmass,ipart) = pathlength(iptmass,ipart) + n(k)*n(k)
          enddo
 
+      pathlength(iptmass,ipart) = sqrt(pathlength(iptmass,ipart))
+
+      ! n must be a unit vector
       n(:) = n(:)/pathlength(iptmass,ipart)
 
       ! Ray halts at tmax = star location
-      tmax = nmag
+      tmax = pathlength(iptmass,ipart)
+
       ! Create list of all particles intersected by ray (raylist)
       ! Launching point is the location of particle ipart
 
@@ -65,8 +69,8 @@ do iptmass=1,nptmass
 
       do jpart = 1,npart
 
-        if(ipart==jpart) cycle
-
+        if(ipart==jpart) cycle ! Ignore self
+        if(jpart==listpm(iptmass)) cycle  ! Ignore sink
 
         ! Calculate t_min
 
@@ -119,12 +123,11 @@ do iptmass=1,nptmass
        
         call calc_tau(jpart,gammamuT(4,jpart),t_sphere(jpart),tauparticle)
 
-        !print*, iray,nray, ipart, jpart,gammamuT(3,jpart),gammamuT(4,jpart), b(jpart)/xyzmh(5,jpart),tauparticle
+!        print*, iray,nray, ipart, jpart,gammamuT(3,jpart),gammamuT(4,jpart), b(jpart)/xyzmh(5,jpart),tauparticle
         tausink(iptmass,ipart) = tausink(iptmass,ipart) + tauparticle
         
      enddo
-      !print*, ipart, xyzmh(1:3,ipart), tausink(iptmass,ipart)
-      !STOP
+      
   enddo
   ! End of loop over particles
 

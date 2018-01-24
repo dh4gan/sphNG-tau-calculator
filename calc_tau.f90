@@ -63,7 +63,7 @@ SUBROUTINE calc_tau(ipart,kap,xi,tau)
 
   !	Calc tau = m*sigma*kappa
 
-  tau = m*sigma*kap/(h*h)
+  tau = m*sigma*kap/(h*h)*umass/(udist*udist)
 
   !print*, s,xi,b_norm,sigma,kap
   CALL FLUSH(iprint)
