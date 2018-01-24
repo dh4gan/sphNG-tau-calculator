@@ -9,22 +9,34 @@ implicit none
 
 integer :: iray,ipart,jpart,iptmass,k
 real :: t_try, tauparticle,tmax,nmag
+real :: percent,increment
 real, dimension(3) :: n,rsink
 
 allocate(tausink(nptmass,npart))
 allocate(av(nptmass,npart))
+allocate(b(npart), t_sphere(npart))
+allocate(t_min(npart))
+allocate(ray(npart))
 
 tausink(:,:) = 0.0
 av(:,:) = 0.0
+
+print*, 'Computing optical depths'
+
 
 ! Loop over all sinks
 do iptmass=1,nptmass
 
    rsink = xyzmh(1:3,listpm(iptmass))
 
+   print*, 'Computing optical depths to sink ',iptmass
+   percent = 0.0
+   increment = 1.0
+
 ! Loop over all particles
    do ipart = 1,npart
 
+      call particle_percent_complete(ipart,npart,percent,increment)
       ! sinks and dead particles get zero tau
       if(iphase(ipart)/=0) then
          tausink(iptmass,ipart) = 0.0
@@ -48,7 +60,7 @@ do iptmass=1,nptmass
       ! Create list of all particles intersected by ray (raylist)
       ! Launching point is the location of particle ipart
 
-
+      nray = 0.0
       ! Now loop over jpart particles
 
       do jpart = 1,npart
@@ -89,11 +101,9 @@ do iptmass=1,nptmass
         if(b(jpart) < 2.0*xyzmh(5,jpart)) then
 
            ! Add particle to raylist
-
-           ray(nray) = ipart
+           nray = nray +1
+           ray(nray) = jpart
            t_min(nray) = t_try
-
-           nray = nray+1
         endif
 
      enddo
@@ -105,12 +115,16 @@ do iptmass=1,nptmass
 
         jpart = ray(iray)
         tauparticle = 0.0
+
+       
         call calc_tau(jpart,gammamuT(4,jpart),t_sphere(jpart),tauparticle)
 
+        !print*, iray,nray, ipart, jpart,gammamuT(3,jpart),gammamuT(4,jpart), b(jpart)/xyzmh(5,jpart),tauparticle
         tausink(iptmass,ipart) = tausink(iptmass,ipart) + tauparticle
         
      enddo
-
+      !print*, ipart, xyzmh(1:3,ipart), tausink(iptmass,ipart)
+      !STOP
   enddo
   ! End of loop over particles
 
@@ -118,7 +132,8 @@ enddo
 ! End of loop over sinks
 
 ! Av = log10(e) tau 
-Av(:,:) = 1.086*tausink(iptmass,ipart)
+Av(:,:) = 1.086*tausink(:,:)
 
+print*, 'Optical depths computed'
 
 end subroutine compute_optical_depths

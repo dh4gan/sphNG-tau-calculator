@@ -67,7 +67,7 @@ module sphdata
   real(kind=8),allocatable,dimension(:) :: angaddx,angaddy,angaddz
   real(kind=8),allocatable,dimension(:) :: spinadx,spinady,spinadz
   real(kind=8),allocatable,dimension(:,:) :: xyzmh,vxyzu
-  real(kind=8),allocatable,dimension(:) :: rho,dgrav,poten
+  real(kind=4),allocatable,dimension(:) :: rho,dgrav,poten
   real(kind=8),allocatable,dimension(:,:) :: gravxyz	        
   
   ! Extra arrays for modern sphNG dumps

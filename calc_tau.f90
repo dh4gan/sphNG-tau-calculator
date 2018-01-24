@@ -21,6 +21,8 @@ SUBROUTINE calc_tau(ipart,kap,xi,tau)
   sigma = 0.0d0
   s = 2.0d0*DSQRT(4.0d0*h*h - b_i*b_i)
 
+
+
   !	Prevent calculating outside the smoothing volume
   IF(xi>s) x=s
   IF(xi<=s) x=xi
@@ -63,6 +65,7 @@ SUBROUTINE calc_tau(ipart,kap,xi,tau)
 
   tau = m*sigma*kap/(h*h)
 
+  !print*, s,xi,b_norm,sigma,kap
   CALL FLUSH(iprint)
   RETURN
 END subroutine calc_tau

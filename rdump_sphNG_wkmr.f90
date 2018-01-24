@@ -192,7 +192,7 @@
 
       print*, '      - SPH dump file correctly read in'
       print*, '      -',npart,'particles in total'
-      print*, '      -',npart-naccrete-1,'gas particles active'
+      print*, '      -',npart-naccrete-nptmass,'gas particles active'
       print*, ' '
 
       return

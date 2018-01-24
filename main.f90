@@ -34,7 +34,7 @@ do ifile=1,nfiles
 
      ! Write SPH data to binary
 
-     call write_binary
+     call write_binary(ifile)
 
      ! Deallocate memory ready for the next file
      call deallocate_memory

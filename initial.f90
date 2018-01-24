@@ -48,7 +48,7 @@ subroutine initial
   do ifile=1,nfiles
 
      write(suffix, '("_",A)') trim(filename(ifile))
-     write(outputfile(ifile),'("trimmedbinary",A)') trim(suffix)
+     write(outputfile(ifile),'("tau",A)') trim(suffix)
   enddo
 
   ! Read in equation of state file

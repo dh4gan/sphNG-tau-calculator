@@ -13,7 +13,7 @@ FC = gfortran
 RENAMES = 
 
 # For files generated from stacpolly use these flags
-FFLAGS = -O3 -frecord-marker=4 -fdefault-real-8
+FFLAGS = -O3 -frecord-marker=4 -fdefault-real-8 -fbounds-check
 
 # For big-endian files generated from stacpolly use these flags
 #FFLAGS = -O3 -fPIC -frecord-marker=4 -fdefault-real-8 -fconvert=swap
@@ -29,7 +29,7 @@ FFLAGS = -O3 -frecord-marker=4 -fdefault-real-8
 
 SOURCESAF90 = sphdata_module.f90 eos_module.f90 tree_module.f90 main.f90 \
 	calc_tau.f90 compute_optical_depths.f90 deallocate_memory.f90 \
-	eos.f90 eosread.f90 initial.f90 \
+	eos.f90 eosread.f90 initial.f90 particle_percent_complete.f90 \
 	read_dump.f90 rdump_sphNG_wkmr.f90 rdump_sphNG_iab.f90 write_binary.f90
 
 OBJECTSA    = $(SOURCESAF90:.f90=.o)
