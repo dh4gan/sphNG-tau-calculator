@@ -70,6 +70,7 @@ module sphdata
   real(kind=4),allocatable,dimension(:) :: rho,dgrav,poten
   real(kind=8),allocatable,dimension(:,:) :: gravxyz	        
   
+
   ! Extra arrays for modern sphNG dumps
   
   real(kind=8), allocatable,dimension(:) :: alphaMM,gradh,gradhsoft

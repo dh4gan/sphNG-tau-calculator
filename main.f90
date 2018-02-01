@@ -15,8 +15,6 @@ call initial
 
 do ifile=1,nfiles
 
-
-
      ! *********************
      ! 1. Read in data file
      ! *********************
@@ -27,6 +25,9 @@ do ifile=1,nfiles
     
      ! Compute opacities etc for this dump
      call eos
+
+     ! If neighbour lists are needed, get them
+     call get_SPH_neighbours(ifile)
 
      ! Compute optical depths
 

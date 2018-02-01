@@ -16,6 +16,9 @@ module treedata
   integer ::  inode,n_node,nodemax,nray
   real :: hmin, xp,yp,zp,nxp,nyp,nzp	
   integer, parameter :: neighmax = 150
+  real,parameter :: tolerance = 5.0 ! Number of smoothing lengths for search radius
+
+  real :: meanneigh,sdneigh,neighcrit
 
   !----------------------Arrays---------------------------------------
 

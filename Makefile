@@ -29,9 +29,12 @@ FFLAGS = -O3 -frecord-marker=4 -fdefault-real-8 -fbounds-check
 
 SOURCESAF90 = sphdata_module.f90 eos_module.f90 tree_module.f90 main.f90 \
 	calc_tau.f90 compute_optical_depths.f90 deallocate_memory.f90 \
-	eos.f90 eosread.f90 initial.f90 particle_percent_complete.f90 \
-	raylist_brute.f90 \
-	read_dump.f90 rdump_sphNG_wkmr.f90 rdump_sphNG_iab.f90 write_binary.f90
+	eos.f90 eosread.f90 get_SPH_neighbours.f90 \
+	initial.f90 particle_percent_complete.f90 \
+	neighbours_brute.f90 raylist_brute.f90 raylist_neighbours.f90 \
+	read_dump.f90 read_neighbours.f90 \
+	rdump_sphNG_wkmr.f90 rdump_sphNG_iab.f90\
+	 write_binary.f90 write_neighbours.f90
 
 OBJECTSA    = $(SOURCESAF90:.f90=.o)
 
