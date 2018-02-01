@@ -12,7 +12,7 @@
     percent = (real(i)/real(ntot))*100.0
     if(percent > previouspercent) then
        write(*,"(F4.0,A)") previouspercent, "% complete"
-       previouspercent = previouspercent + 10.0
+       previouspercent = previouspercent + increment
     endif
 
     return

@@ -114,7 +114,7 @@ do iptmass=1,nptmass
     ! End of loop over jpart
 
     ! loop over raylist and calculate optical depths
-
+    
     do iray = 1,nray
 
         jpart = ray(iray)
@@ -127,7 +127,7 @@ do iptmass=1,nptmass
         tausink(iptmass,ipart) = tausink(iptmass,ipart) + tauparticle
         
      enddo
-      
+     print*, ipart, nray, tausink(iptmass,ipart)
   enddo
   ! End of loop over particles
 
