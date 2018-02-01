@@ -19,11 +19,13 @@ integer :: jpart,k
 real :: t_try
 
 nray = 0
+t_sphere(:) = 0.0
 
 do jpart=1,npart
 
    if(jpart==ipart .or.jpart==listpm(iptmass)) cycle ! Ignore self and sink
    
+   if(iphase(jpart)/=0) cycle
  ! Calculate t_min
 
         t_try = 0.0
