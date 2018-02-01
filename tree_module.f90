@@ -19,6 +19,7 @@ module treedata
   real,parameter :: tolerance = 5.0 ! Number of smoothing lengths for search radius
 
   real :: meanneigh,sdneigh,neighcrit
+  logical :: use_neighbourlist
 
   !----------------------Arrays---------------------------------------
 

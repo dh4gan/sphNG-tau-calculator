@@ -64,7 +64,11 @@ do iptmass=1,nptmass
       ! Create list of all particles intersected by ray (raylist)
       ! Launching point is the location of particle ipart
 
-      call raylist_brute(ipart,iptmass,n,tmax)
+      if(use_neighbourlist) then
+         call raylist_neighbours(ipart,iptmass,n,tmax)
+      else
+         call raylist_brute(ipart,iptmass,n,tmax)
+      endif
 
       ! loop over raylist and calculate optical depths
     

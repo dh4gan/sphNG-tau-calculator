@@ -1,8 +1,10 @@
 subroutine initial
 
   use sphdata
-
+  use treedata, only: use_neighbourlist
   character(100) :: suffix
+  character(1) :: useneigh
+
 
   ! Set up calculation
 
@@ -19,18 +21,15 @@ subroutine initial
 
   ! Read in parameter file
 
-  OPEN(10,file=paramfile, status='unknown')
-  read(10,*) listfile
-  read(10,*) fileformat
-
-  close(10)
-
-
   open(10,file=paramfile, status='old')
   read(10,*) listfile ! File containing list of dumps to analyse
   read(10,*) fileformat ! sphNG_wkmr, sphNG_iab
+  read(10,*) useneigh ! Use neighbour lists? (y/n)
 
   close(10)
+
+  use_neighbourlist = .false.
+  if(useneigh=='y' .or. useneigh=='Y') use_neighbourlist = .true.
 
   ! Read listfile and generate array of filenames
 

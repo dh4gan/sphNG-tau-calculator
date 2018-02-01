@@ -4,6 +4,7 @@ program sph_tau_calculator
 ! from all SPH particles to all sinks
 
 use sphdata,only:nfiles
+use treedata, only:use_neighbourlist
 implicit none
 
 logical :: skipdump
@@ -27,7 +28,7 @@ do ifile=1,nfiles
      call eos
 
      ! If neighbour lists are needed, get them
-     call get_SPH_neighbours(ifile)
+     if(use_neighbourlist) call get_SPH_neighbours(ifile)
 
      ! Compute optical depths
 
