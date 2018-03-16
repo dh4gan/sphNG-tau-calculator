@@ -83,7 +83,7 @@ do iptmass=1,nptmass
          tausink(iptmass,ipart) = tausink(iptmass,ipart) + tauparticle
         
       enddo
-      print*, ipart, nray, tausink(iptmass,ipart)
+      !print*, ipart, nray, tausink(iptmass,ipart)
    enddo
    ! End of loop over particles
 

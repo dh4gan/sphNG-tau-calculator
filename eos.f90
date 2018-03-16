@@ -18,6 +18,7 @@ subroutine eos
   real :: mkbar,mkbar1,mkbar2,ckbar,ckbar1,ckbar2,kbar1,kbar2
   real :: cv
 
+  print*, 'Computing EOS variables'
   ! Allocate output array
   allocate(gammamuT(5,npart))
 

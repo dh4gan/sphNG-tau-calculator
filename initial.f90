@@ -37,6 +37,8 @@ subroutine initial
 
   read(20,*) nfiles
 
+  print*, 'Reading ', nfiles, ' filenames'
+
   allocate(filename(nfiles))
   do ifile=1,nfiles
      read(20,*) filename(ifile)
