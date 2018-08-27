@@ -86,9 +86,10 @@ module sphdata
   integer :: nfiles
 
   character(25),parameter :: paramfile='sph_tau_calculator.params'
-  character(100) :: listfile, filetype,fileformat
-  character(1) :: splitdumpchoice, tensorchar
+  character(100) :: listfile,filetype,fileformat
+  character(1) :: splitdumpchoice, tensorchar,tracerchoice
 
+  logical :: write_tracer
   character(100), allocatable,dimension(:) :: filename,outputfile
 
   real,allocatable,dimension(:,:) :: tausink, Av, pathlength

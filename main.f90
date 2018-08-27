@@ -3,16 +3,24 @@ program sph_tau_calculator
 ! Code reads in an sphNG file, and then computes optical depth (Av)
 ! from all SPH particles to all sinks
 
-use sphdata,only:nfiles
+use sphdata,only:nfiles, write_tracer
 use treedata, only:use_neighbourlist
 implicit none
 
-logical :: skipdump
-integer :: ifile
+logical :: skipdump, first
+integer :: ifile, listID, tracerID
 
 ! Read in parameters, data and set up run
 
 call initial
+
+if(write_tracer.eqv..true.) then
+   tracerID = 11
+   listID = 99
+   first = .true.
+   ! Open List file for writing complete list
+   OPEN(listID,file='tracerfiles.list', form='formatted')
+endif
 
 do ifile=1,nfiles
 
@@ -36,7 +44,14 @@ do ifile=1,nfiles
 
      ! Write SPH data to binary
 
-     call write_binary(ifile)
+     if(write_tracer.eqv..true.)then
+
+        first = .false.
+        if(ifile==1) first=.true.
+        call write_to_tracer_files(tracerID,listID,first)        
+     else
+        call write_binary(ifile)
+     endif
 
      ! Deallocate memory ready for the next file
      call deallocate_memory

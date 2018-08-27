@@ -34,7 +34,7 @@ SOURCESAF90 = sphdata_module.f90 eos_module.f90 tree_module.f90 main.f90 \
 	neighbours_brute.f90 raylist_brute.f90 raylist_neighbours.f90 \
 	read_dump.f90 read_neighbours.f90 \
 	rdump_sphNG_wkmr.f90 rdump_sphNG_iab.f90\
-	 write_binary.f90 write_neighbours.f90
+	 write_binary.f90 write_neighbours.f90 write_to_tracer_files.f90
 
 OBJECTSA    = $(SOURCESAF90:.f90=.o)
 

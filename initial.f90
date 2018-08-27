@@ -25,11 +25,16 @@ subroutine initial
   read(10,*) listfile ! File containing list of dumps to analyse
   read(10,*) fileformat ! sphNG_wkmr, sphNG_iab
   read(10,*) useneigh ! Use neighbour lists? (y/n)
+  read(10,*) tracerchoice ! Write to tracer files (t) or snapshots (s)
 
   close(10)
 
   use_neighbourlist = .false.
   if(useneigh=='y' .or. useneigh=='Y') use_neighbourlist = .true.
+
+
+  write_tracer = .false.
+  if(tracerchoice=='t' .or. tracerchoice=='T') write_tracer = .true.
 
   ! Read listfile and generate array of filenames
 
