@@ -41,7 +41,7 @@ do ipart = 1,npart
    if(iphase(ipart)<0) cycle
    write(tracernum,fmt) ipart
    
-   tracerfile = "trace."//TRIM(tracernum)
+   tracerfile = "tautrace."//TRIM(tracernum)
    !print*, TRIM(tracerfile)
    
    ! If this is the first file, then open rather than append the file
