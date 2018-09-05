@@ -3,7 +3,7 @@ program sph_tau_calculator
 ! Code reads in an sphNG file, and then computes optical depth (Av)
 ! from all SPH particles to all sinks
 
-use sphdata,only:nfiles, write_tracer
+use sphdata,only:nfiles, nptmass,filename,write_tracer
 use treedata, only:use_neighbourlist
 implicit none
 
@@ -22,16 +22,23 @@ if(write_tracer.eqv..true.) then
    OPEN(listID,file='tracerfiles.list', form='formatted')
 endif
 
+first = .true.
 do ifile=1,nfiles
 
-     ! *********************
-     ! 1. Read in data file
-     ! *********************
 
-     call read_dump(ifile,skipdump)
+   ! *********************
+   ! 1. Read in data file
+   ! *********************
+
+   call read_dump(ifile,skipdump)
 
      if(skipdump.eqv..true.) cycle
     
+     if(nptmass==0) then
+        print*, 'No sinks in file ', TRIM(filename(ifile)), ': skipping'
+        call deallocate_memory
+        cycle
+     endif
      ! Compute opacities etc for this dump
      call eos
 
@@ -45,10 +52,8 @@ do ifile=1,nfiles
      ! Write SPH data to binary
 
      if(write_tracer.eqv..true.)then
-
-        first = .false.
-        if(ifile==1) first=.true.
         call write_to_tracer_files(tracerID,listID,first)        
+        if(first.eqv..true.) first=.false.
      else
         call write_binary(ifile)
      endif
