@@ -1,5 +1,4 @@
 # Computing optical depths in sphNG simulations of star formation #
-----------------------------------------------------
 
 This FORTRAN 90 repository reads in sphNG simulation data, and computes the optical depth of each SPH particle to 
 any pointmass particle.  This can then be used in post-processing of the simulation (for example, to investigate local chemistry).
@@ -8,6 +7,7 @@ The code is a repurposing of algorithms first published in:
 
 Forgan & Rice (2010), Monthly Notices of the Royal Astronomical Society, Volume 406, Issue 4, pp. 2549-2558
 
+This code can read both modern sphNG files, as well as the historic sphNG files that I have used for the last twelve years.  I apologise for the lack of user-friendly touches - I haven't had much time to finesse them!
 
 ## How it works ##
 
@@ -24,7 +24,6 @@ which is determined by an equation of state stored in `paramfiles/myeos.dat`
 
 
 ## Compilation and Execution ##
-----------------------------------
 
 This code was developed and tested on gfortran 8.2.0, and compiled with standard Makefile software.
 
@@ -41,7 +40,6 @@ The code will attempt to read `myeos.dat`, and `sph_tau_calculator.params`, both
 Both can be found in the `paramfiles/` directory.  The code will also read in a list of sphNG simulations from file (one sphNG file per line).  Said file is to be specified by the user in `sph_tau_calculator.params`.
 
 ## Outputs ##
----------------
 
 The code can produce two types of output:
 
