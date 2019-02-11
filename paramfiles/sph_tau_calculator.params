@@ -1,3 +1,4 @@
 listfile.txt			! File containing list of input dumps
 sphNG_wkmr			! Format of input dumps
 n				! Use neighbour list for tracing? (y/n)
+t				! Write to tracer files (t) or snapshots (s)
