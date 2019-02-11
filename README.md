@@ -20,17 +20,7 @@ moves through the SPH particle's smoothing volume.
 The optical depth through the smoothing volume is this column density multiplied by the particle's opacity,
 which is determined by an equation of state stored in `paramfiles/myeos.dat` 
 
-(details of the equation of state can be found in Forgan et al 2009, Monthly Notices of the Royal Astronomical Society, Volume 394, Issue 2, pp. 882-891)) 
-
-
-## Outputs ##
----------------
-
-The code can produce two types of output:
-
-1) One tracer file per particle, to easily plot particle properties vs time
-
-2) Snapshot files, where all particle data at a single timestep is recorded
+(details of the equation of state can be found in Forgan et al 2009, Monthly Notices of the Royal Astronomical Society, Volume 394, Issue 2, pp. 882-891)
 
 
 ## Compilation and Execution ##
@@ -48,8 +38,14 @@ Which produces the `sph_tau_calculator` executable.  The code is then run with t
 `> ./sph_tau_calculator `
 
 The code will attempt to read `myeos.dat`, and `sph_tau_calculator.params`, both of which must reside in the same directory.  
-Both can be found in the `paramfiles/` directory.  The code will also read in a list of sphNG simulations from file.  
+Both can be found in the `paramfiles/` directory.  The code will also read in a list of sphNG simulations from file (one sphNG file per line).  Said file is to be specified by the user in `sph_tau_calculator.params`.
 
-Said file is to be specified by the user in `sph_tau_calculator.params`.
+## Outputs ##
+---------------
 
+The code can produce two types of output:
+
+1) One tracer file per particle (t), to easily plot particle properties vs time
+
+2) Snapshot files (s), where all particle data at a single timestep is recorded
   
